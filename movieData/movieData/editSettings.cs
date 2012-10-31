@@ -41,7 +41,7 @@ namespace movieData
 
         private void button2_Click(object sender, EventArgs e)
         {
-            dm.Settings.vlc = "\"" + openWithDir.Text.Trim() + "\"";
+            dm.Settings.vlc = openWithDir.Text.Trim();
             dm.Settings.writeSettings();
             sendEdit(null, null);
         }

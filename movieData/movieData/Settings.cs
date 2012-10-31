@@ -17,7 +17,7 @@ namespace movieData
         {
 
             //Sets defaults
-            VLC = "\"" + Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\VideoLAN\VLC\vlc.exe" + "\"";
+            VLC = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\VideoLAN\VLC\vlc.exe";
             vlcDefault = false;
 
 

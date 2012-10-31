@@ -321,7 +321,7 @@
             this.Controls.Add(this.fileL);
             this.Controls.Add(this.titleL);
             this.Name = "editMovie";
-            this.Size = new System.Drawing.Size(1620, 780);
+            this.Size = new System.Drawing.Size(1258, 588);
             ((System.ComponentModel.ISupportInitialize)(this.imageP)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

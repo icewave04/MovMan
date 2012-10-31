@@ -59,6 +59,10 @@ namespace movieData
             SearchMovie.VerticalScroll.Enabled = false;
             mainPanel.VerticalScroll.Enabled = false;
             this.VerticalScroll.Enabled = false;
+            NewMovie.Dock = DockStyle.Bottom;
+            EditSettings.Dock = DockStyle.Bottom;
+            ViewMovie.Dock = DockStyle.Bottom;
+            EditMovie.Dock = DockStyle.Bottom;
             #endregion
 
             mainPanel.Controls.Add(SearchMovie);
