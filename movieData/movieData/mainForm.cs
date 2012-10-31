@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace movieData
 {
@@ -36,7 +37,30 @@ namespace movieData
         public mainForm()
         {
             InitializeComponent();
-            
+
+            try
+            {
+                if (!Directory.Exists("Errors"))
+                {
+                    Directory.CreateDirectory("Errors");
+                }
+
+                if (!Directory.Exists("Images"))
+                {
+                    Directory.CreateDirectory("Images");
+                }
+
+                if (!Directory.Exists("Images/Movies"))
+                {
+                    Directory.CreateDirectory("Images/Movies");
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show("Error", err.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+
 
             ap = panelAct.mainForm;
 
