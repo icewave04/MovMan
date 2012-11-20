@@ -8,30 +8,33 @@ namespace movieData
 {
     public class dataManager
     {
-        private List<simpleMovie> movieList;
+        private List<info> movieList; //Consider expanding this to a Dictionary as well, for the advent of "Sequal" linking and other data types
+        //Consider; a base Set class and derived classes for each type of Set (Info, Episode, ect) and then a dictionary to store the base set class (so that it may store any derived set)
         private Dictionary<string, data> movieData;
-        private fileManager fm;
+        private fileManager FileMan;
         private Settings settings;
-        public globalException ge;
+        public globalException GE;
         private bool sorted = false;
+        private bool locked = false;
+        public static int lastID; //For future use, requires major data structure rewrite
 
         public dataManager()
         {
-            ge = new globalException();
-            movieList = new List<simpleMovie>();
+            GE = new globalException();
+            movieList = new List<info>();
             movieData = new Dictionary<string, data>();
-            fm = new fileManager();
+            FileMan = new fileManager();
             settings = new Settings();
             //Implement threading at a later date
-            if (fm.readFile())
+            if (FileMan.readFile())
             {
-                fm.readAll(ref movieList);
+                FileMan.readAll(ref movieList);
                 Console.WriteLine(String.Format("{0} entires have been added via file", movieList.Count));
                 sorted = true;
             }
-            if (fm.readData())
+            if (FileMan.readData())
             {
-                fm.readData(ref movieData);
+                FileMan.readData(ref movieData);
             }
 
 
@@ -47,7 +50,7 @@ namespace movieData
         {
             get
             {
-                return this.fm;
+                return this.FileMan;
             }
         }
 
@@ -59,7 +62,7 @@ namespace movieData
             }
         }
 
-        public simpleMovie getMovie(int i)
+        public info getMovie(int i)
         {
             return this.movieList[i];
         }
@@ -79,10 +82,32 @@ namespace movieData
                 return movieList.Count;
             }
         }
+        public bool Locked
+        {
+            get
+            {
+                return locked;
+            }
+            set
+            {
+                locked = value;
+            }
+        }
         #endregion
 
+        public static int getLastID()
+        {
+            return lastID;
+        }
+
+        public static int getAndIncID()
+        {
+            lastID++;
+            return lastID;
+        }
+
         //Deletes an entry from list and dictionary, writes modified data to file
-        public bool removeEntry(int i, simpleMovie s, out string result)
+        public bool removeEntry(int i, info s, out string result)
         {
             try
             {
@@ -112,12 +137,12 @@ namespace movieData
             catch (ArgumentOutOfRangeException a)
             {
                 result = "Out Of Bounds Exception";
-                this.ge.GlobalTryCatch(a, s);
+                this.GE.GlobalTryCatch(a, s);
                 return false;
             }
             catch (Exception e)
             {
-                this.ge.GlobalTryCatch(e, s);
+                this.GE.GlobalTryCatch(e, s);
                 result = "An error occured";
                 return false;
             }
@@ -132,22 +157,22 @@ namespace movieData
             }
             catch (KeyNotFoundException k)
             {
-                this.ge.GlobalTryCatch(k, file);
+                this.GE.GlobalTryCatch(k, file);
                 return null;
             }
         }
 
         #region The Search Algorithms
-        public void performActorOnlySearch(string p, bool b, ref List<simpleMovie> resultList)
+        public void performActorOnlySearch(string p, bool b, ref List<info> resultList) //Still needs work to return more accurate results in partial match cases
         {
             string[] words = p.ToLower().Split(' ');
         
             int count = 0;
             int max = words.Length;
             bool broken = false;
-            if (words.Length > 1)
+            if (words.Length > 0)
             {
-                foreach (simpleMovie a in movieList)
+                foreach (info a in movieList)
                 {
                     
                     count = 0;
@@ -172,7 +197,7 @@ namespace movieData
                             }
                             catch (IndexOutOfRangeException e)
                             {
-                                this.ge.GlobalTryCatch(e, p);
+                                this.GE.GlobalTryCatch(e, p);
                             }
                         }
                         if (broken)
@@ -192,11 +217,11 @@ namespace movieData
             }
             else
             {
-                performAdvancedSearch(p, ref resultList);
+                performAdvancedSearch(p, ref resultList); //Unreachable
             }
         }
 
-        public void performDetailedAdvancedSearch(string p, ref List<simpleMovie> resultList)
+        public void performDetailedAdvancedSearch(string p, ref List<info> resultList)
         {
             string[] words = p.ToLower().Split(' ');
             int count = 0;
@@ -212,7 +237,7 @@ namespace movieData
             if (words.Length > 1)
             {
                 data d;
-                foreach (simpleMovie a in movieList)
+                foreach (info a in movieList)
                 {
                     d = movieData[a.File];
                     count = 0;
@@ -237,10 +262,10 @@ namespace movieData
             }
         }
 
-        public void performAdvancedSearch(string p, ref List<simpleMovie> resultList)
+        public void performAdvancedSearch(string p, ref List<info> resultList)
         {
             data d;
-            foreach (simpleMovie a in movieList)
+            foreach (info a in movieList)
             {
                 d = movieData[a.File];
 
@@ -256,12 +281,12 @@ namespace movieData
             }
         }
 
-        public void performDetailedSearch(string p, ref List<simpleMovie> resultList)
+        public void performDetailedSearch(string p, ref List<info> resultList)
         {
             string[] words = p.ToLower().Split(' ');
             if (words.Length > 1)
             {
-                foreach (simpleMovie a in movieList)
+                foreach (info a in movieList)
                 {
                     foreach (string word in words)
                     {
@@ -275,14 +300,14 @@ namespace movieData
             }
         }
 
-        public void performRegexSearch(string p, ref List<simpleMovie> resultList)
+        public void performRegexSearch(string p, ref List<info> resultList)
         {
             p = p.ToLower();
             try
             {
                 if (p.Length == 1)
                 {
-                    foreach (simpleMovie a in movieList)
+                    foreach (info a in movieList)
                     {
                         if (p[0] == a.getTitle().ToLower()[0])
                         {
@@ -294,7 +319,7 @@ namespace movieData
                 {
                     Regex reg = new Regex(String.Format("^[\\w]*{0}{1}[\\w]*$", p, "{1}"), RegexOptions.IgnoreCase);
 
-                    foreach (simpleMovie a in movieList)
+                    foreach (info a in movieList)
                     {
                         if (a.getTitle().ToLower() != p)
                         {
@@ -312,19 +337,19 @@ namespace movieData
             }
             catch (ArgumentOutOfRangeException a)
             {
-                this.ge.GlobalTryCatch(a, p);
+                this.GE.GlobalTryCatch(a, p);
             }
 
         }
 
-        public simpleMovie performSearch(string search)
+        public info performSearch(string search)
         {
-            simpleMovie x = new simpleMovie(search, search);
+            info x = new info(search, search);
             try
             {
                 if (sorted && movieList.Count > 5) //If the list is sorted perform binary search
                 {
-                    simpleMovie s = movieList[movieList.BinarySearch(x)];
+                    info s = movieList[movieList.BinarySearch(x)];
                     if (s != null)
                     {
                         return s;
@@ -332,8 +357,8 @@ namespace movieData
                 }
                 else //Else this, only searches for exact matches
                 {
-                    simpleMovie s = movieList.Find(
-                        delegate(simpleMovie sm)
+                    info s = movieList.Find(
+                        delegate(info sm)
                         { 
                             return sm.getTitle().ToLower() == x.getTitle().ToLower();
                         }
@@ -347,17 +372,17 @@ namespace movieData
             }
             catch (ArgumentOutOfRangeException a)
             {
-                this.ge.GlobalTryCatch(a, search);
+                this.GE.GlobalTryCatch(a, search);
             }
             return null;
         }
         #endregion
 
-        //Call tp fm to write data
+        //Call to fm to write data
         private void writeList()
         {
-            fm.writeAll(movieList);
-            fm.writeData(movieData);
+            FileMan.writeAll(movieList);
+            FileMan.writeData(movieData);
         }
 
         public int getListSize()
@@ -365,7 +390,7 @@ namespace movieData
             return movieList.Count;
         }
 
-        public int getIndexOf(simpleMovie x)
+        public int getIndexOf(info x)
         {
             return movieList.IndexOf(x);
         }
@@ -411,7 +436,7 @@ namespace movieData
                 {//Genre and Rating can never be null
                     if (!movieData.ContainsKey(file))
                     {
-                        movieList.Add(new simpleMovie(title, file, rating, genre));
+                        movieList.Add(new info(title, file, rating, genre));
                         movieData.Add(file, new data(year, image, description, 0));
                         if (actors.Count != 0)
                         {
@@ -451,7 +476,7 @@ namespace movieData
             for (int i = 0; i < X; i++)
             {
                 string x = Char.ConvertFromUtf32(122-(i % 26));
-                movieList.Add(new simpleMovie(x+"title"+i, i+"file"+x, ratingEnum.G, genreEnum.Romance));
+                movieList.Add(new info(x+"title"+i, i+"file"+x, ratingEnum.G, genreEnum.Romance));
                 movieData.Add(i + "file" + x, new data(i, i + x + "image" + x, "description" + i + x + i + x, 0));
                 if (hax && i > X) //Used to stress test file output system, forces a write after every entry after X
                 {
@@ -472,7 +497,7 @@ namespace movieData
 
         private void outputAll()
         {
-            foreach (simpleMovie print in movieList)
+            foreach (info print in movieList)
             {
                 Console.Write(print.ToString());
                 try
@@ -482,13 +507,13 @@ namespace movieData
                 catch (KeyNotFoundException e)
                 {
                     Console.Write("Error, Key Not Found. No data recorded for this entry.\n");
-                    this.ge.GlobalTryCatch(e, "Output All");
+                    this.GE.GlobalTryCatch(e, "Output All");
                 }
             }
         }
 
         //Culls sorted by performing a comparision on i and i+1, if they are a match it removes i+1 and reduces i to maintain position in the list
-        public void cullSorted<T>(ref List<T> sortList) where T: simpleMovie
+        public void cullSorted<T>(ref List<T> sortList) where T: info
         {
             for (int i = 0; i < sortList.Count-1; i++)
             {
@@ -501,14 +526,14 @@ namespace movieData
         }
 
         #region Quick Sort - Median of Three
-        private void swap<T>(int i, int j, List<T> sortList) where T : simpleMovie
+        private void swap<T>(int i, int j, List<T> sortList) where T : info
         {
             T temp = sortList[i];
             sortList[i] = sortList[j];
             sortList[j] = temp;
         }
 
-        public void quickSort<T>(ref List<T> sortList) where T : simpleMovie
+        public void quickSort<T>(ref List<T> sortList) where T : info
         {
             int left = 0;
             int right = sortList.Count-1;
@@ -517,7 +542,7 @@ namespace movieData
             sorted = true;
         }
 
-        private void quickQuickSort<T>(int left, int right, List<T> sortList) where T : simpleMovie
+        private void quickQuickSort<T>(int left, int right, List<T> sortList) where T : info
         {
             if (left < right)
             {
@@ -531,7 +556,7 @@ namespace movieData
             }
         }
 
-        private int partition<T>(int left, int right, List<T> sortList) where T : simpleMovie
+        private int partition<T>(int left, int right, List<T> sortList) where T : info
         {
             int mid = medianOf3(left, right, sortList);
             T pivot = sortList[mid];
@@ -563,7 +588,7 @@ namespace movieData
             return left;
         }
 
-        private int medianOf3<T>(int left, int right, List<T> sortList) where T : simpleMovie
+        private int medianOf3<T>(int left, int right, List<T> sortList) where T : info
         {
             int mid = (left + right) / 2;
             if (sortList[left].CompareTo(sortList[mid]) < 0)

@@ -35,14 +35,14 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Location = new System.Drawing.Point(98, 111);
+            this.mainPanel.Location = new System.Drawing.Point(1, 111);
             this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Size = new System.Drawing.Size(1694, 821);
+            this.mainPanel.Size = new System.Drawing.Size(1803, 820);
             this.mainPanel.TabIndex = 0;
             // 
             // newMovieButton
             // 
-            this.newMovieButton.Location = new System.Drawing.Point(12, 828);
+            this.newMovieButton.Location = new System.Drawing.Point(12, 12);
             this.newMovieButton.Name = "newMovieButton";
             this.newMovieButton.Size = new System.Drawing.Size(80, 52);
             this.newMovieButton.TabIndex = 1;
@@ -52,7 +52,7 @@
             // 
             // settingsBtn
             // 
-            this.settingsBtn.Location = new System.Drawing.Point(12, 770);
+            this.settingsBtn.Location = new System.Drawing.Point(98, 12);
             this.settingsBtn.Name = "settingsBtn";
             this.settingsBtn.Size = new System.Drawing.Size(80, 52);
             this.settingsBtn.TabIndex = 2;
@@ -65,8 +65,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1804, 941);
-            this.Controls.Add(this.settingsBtn);
             this.Controls.Add(this.newMovieButton);
+            this.Controls.Add(this.settingsBtn);
             this.Controls.Add(this.mainPanel);
             this.Name = "mainForm";
             this.Text = "Movie Manager - Almost Beta";

@@ -17,7 +17,7 @@ namespace movieData
     public partial class newMovie : UserControl
     {
         private List<string> actors;
-        private dataManager dm;
+        private dataManager DataManager;
         public EventHandler movieAdded = null;
         public EventHandler autoFill = null;
         private Thread autoFiller;
@@ -25,10 +25,10 @@ namespace movieData
         private Thread thisThread;
 
         
-        public newMovie(dataManager dm)
+        public newMovie(dataManager DataManager)
         {
             InitializeComponent();
-            this.dm = dm;
+            this.DataManager = DataManager;
             actors = new List<string>();
             genreCB.DataSource = Enum.GetValues(typeof(genreEnum));
             genreCB.SelectedItem = genreEnum.Unknown;
@@ -145,7 +145,7 @@ namespace movieData
                     Int32.TryParse(yearT.Text.Trim(), out x);
                     if (imageDownload())
                     {
-                        if (dm.addMovie(titleT.Text.Trim(), (genreEnum)genreCB.SelectedIndex, (ratingEnum)ratingCB.SelectedIndex, fileLocationT.Text.Trim(), x, String.Format(@"images\movies\{0}", String.Format("{0}{1}{2}", titleT.Text.Trim().Replace(" ", ""), yearT.Text.Trim(), genreCB.Text)), descriptionT.Text.Trim(), actors, out result))
+                        if (DataManager.addMovie(titleT.Text.Trim(), (genreEnum)genreCB.SelectedIndex, (ratingEnum)ratingCB.SelectedIndex, fileLocationT.Text.Trim(), x, String.Format(@"images\movies\{0}", String.Format("{0}{1}{2}", titleT.Text.Trim().Replace(" ", ""), yearT.Text.Trim(), genreCB.Text)), descriptionT.Text.Trim(), actors, out result))
                         {
                             movieAdded(this, new EventArgs());
                         }

@@ -37,9 +37,10 @@
             // 
             // searchButton
             // 
+            this.searchButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.searchButton.Location = new System.Drawing.Point(959, 747);
             this.searchButton.Name = "searchButton";
-            this.searchButton.Size = new System.Drawing.Size(75, 23);
+            this.searchButton.Size = new System.Drawing.Size(75, 32);
             this.searchButton.TabIndex = 1;
             this.searchButton.Text = "Search";
             this.searchButton.UseVisualStyleBackColor = true;
@@ -48,16 +49,17 @@
             // 
             // searchT
             // 
+            this.searchT.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.searchT.Location = new System.Drawing.Point(3, 749);
             this.searchT.Name = "searchT";
-            this.searchT.Size = new System.Drawing.Size(950, 20);
+            this.searchT.Size = new System.Drawing.Size(950, 30);
             this.searchT.TabIndex = 2;
             this.searchT.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.enterPress);
             // 
             // resultTree
             // 
             this.resultTree.BackColor = System.Drawing.SystemColors.Control;
-            this.resultTree.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.resultTree.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F);
             this.resultTree.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.resultTree.Location = new System.Drawing.Point(13, 14);
             this.resultTree.Name = "resultTree";
@@ -68,6 +70,7 @@
             // resultInfoT
             // 
             this.resultInfoT.BackColor = System.Drawing.SystemColors.Control;
+            this.resultInfoT.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
             this.resultInfoT.Location = new System.Drawing.Point(823, 14);
             this.resultInfoT.Multiline = true;
             this.resultInfoT.Name = "resultInfoT";
@@ -77,15 +80,16 @@
             // 
             // searchCB
             // 
+            this.searchCB.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.searchCB.FormattingEnabled = true;
             this.searchCB.Items.AddRange(new object[] {
             "Actor Only Search",
             "Specific Actor Only Search",
             "Detailed Search",
             "Advanced Search"});
-            this.searchCB.Location = new System.Drawing.Point(1040, 705);
+            this.searchCB.Location = new System.Drawing.Point(1051, 680);
             this.searchCB.Name = "searchCB";
-            this.searchCB.Size = new System.Drawing.Size(150, 64);
+            this.searchCB.Size = new System.Drawing.Size(249, 100);
             this.searchCB.TabIndex = 9;
             this.searchCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.prompt);
             // 
@@ -99,7 +103,7 @@
             this.Controls.Add(this.searchT);
             this.Controls.Add(this.searchButton);
             this.Name = "searchMovie";
-            this.Size = new System.Drawing.Size(1219, 780);
+            this.Size = new System.Drawing.Size(1321, 780);
             this.ResumeLayout(false);
             this.PerformLayout();
 

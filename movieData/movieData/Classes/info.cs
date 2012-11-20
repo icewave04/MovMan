@@ -6,31 +6,42 @@ using System.Collections;
 
 namespace movieData
 {
-    public class simpleMovie : IComparable, IComparer
+    public class info : IComparable, IComparer
     {
         private string title;
         private genreEnum genre;
         private ratingEnum rating;
         private string file;
         private bool hasThe;
+        private int ID;
         //Image, Year, Description and Actors will be in a seperate data structure
 
-        public simpleMovie(string title, string file)
+
+
+        //To be added, a MovieSet class, which contains a set of info class for movies of the same set (The Matrix, The Matrix 2..., The Matrix 3...)
+        public info(string title, string file)
         {
             this.title = title;
             this.file = file;
             genre = genreEnum.Unknown;
             rating = ratingEnum.Unknown;
             hasThe = theSubstringCheck();
+            setThisID();
         }
 
-        public simpleMovie(string title, string file, ratingEnum rating, genreEnum genre)
+        public info(string title, string file, ratingEnum rating, genreEnum genre)
         {
             this.title = title;
             this.file = file;
             this.rating = rating;
             this.genre = genre;
             hasThe = theSubstringCheck();
+            setThisID();
+        }
+
+        private void setThisID()
+        {
+            dataManager.getAndIncID();
         }
 
         public genreEnum Genre
@@ -110,29 +121,29 @@ namespace movieData
         {
             if (this.hasThe)
             {
-                if ((obj as simpleMovie).hasThe)
+                if ((obj as info).hasThe)
                 {
-                    return title.Substring(4).ToLower().CompareTo((obj as simpleMovie).title.Substring(4).ToLower());
+                    return title.Substring(4).ToLower().CompareTo((obj as info).title.Substring(4).ToLower());
                 }
-                return title.Substring(4).ToLower().CompareTo((obj as simpleMovie).title.ToLower());
+                return title.Substring(4).ToLower().CompareTo((obj as info).title.ToLower());
             }
             else
             {
-                if ((obj as simpleMovie).hasThe)
+                if ((obj as info).hasThe)
                 {
-                    return title.ToLower().CompareTo((obj as simpleMovie).title.Substring(4).ToLower());
+                    return title.ToLower().CompareTo((obj as info).title.Substring(4).ToLower());
                 }
-                return title.ToLower().CompareTo((obj as simpleMovie).title.ToLower());
+                return title.ToLower().CompareTo((obj as info).title.ToLower());
             }
         }
 
         public int Compare(object x, object y)
         {
-            if ((x as simpleMovie).getTitle() == (y as simpleMovie).getTitle()) { return 0; }
+            if ((x as info).getTitle() == (y as info).getTitle()) { return 0; }
             if (x == null) { return -1; }
             if (y == null) { return 1; }
 
-            return (x as simpleMovie).getTitle().CompareTo((y as simpleMovie).getTitle());
+            return (x as info).getTitle().CompareTo((y as info).getTitle());
         }
     }
 }

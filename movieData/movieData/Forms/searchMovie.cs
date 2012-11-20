@@ -19,9 +19,9 @@ namespace movieData
         private readonly int searchButtingWidthPercent = 5;
         private readonly int checkBoxWidthPercent = 5;
         private readonly int buffer = 20;
-        private dataManager dm;
-        simpleMovie exactMovie;
-        private List<simpleMovie> resultList;
+        private dataManager DataManager;
+        info exactMovie;
+        private List<info> resultList;
         private List<int> resultKey;
         List<TreeNode> treeList;
         TreeNode exactMatch;
@@ -42,8 +42,8 @@ namespace movieData
         {
             InitializeComponent();
             resultString = String.Empty;
-            this.dm = dm;
-            resultList = new List<simpleMovie>();
+            this.DataManager = dm;
+            resultList = new List<info>();
             resultKey = new List<int>();
             
             
@@ -56,7 +56,8 @@ namespace movieData
 
         public void resize(int x, int y) //Resize method used when the main window has changed in size, considering chaning z/100 to z*0.01 (requires conversion between int's and doubles)
         {
-            
+            this.Height = y;
+            this.Width = x;
             searchT.Size = new Size((x / 100) * searchBarWidthPercent, searchT.Size.Height);
             searchButton.Size = new Size((x / 100) * searchButtingWidthPercent, searchButton.Size.Height);
             resultTree.Size = new Size(((x / 100) * resultWidthPercent), ((y / 100) * resultHeightPercent));
@@ -65,10 +66,9 @@ namespace movieData
             resultTree.Location = new Point(searchT.Location.X, y-(y-searchT.Location.Y)-resultTree.Size.Height-buffer);
             resultInfoT.Location = new Point(resultTree.Location.X+resultTree.Size.Width+buffer, resultTree.Location.Y);
             searchButton.Location = new Point((searchT.Location.X + searchT.Size.Width + ((x / 100) * 1)), searchT.Location.Y);
-            searchCB.Location = new Point((searchButton.Location.X+searchButton.Size.Width)+searchCB.Size.Width, searchT.Location.Y - searchCB.Size.Height+searchT.Size.Height);
-            this.Dock = DockStyle.Fill;
-            this.Height = y;
-            this.Width = x;
+            searchCB.Location = new Point((searchButton.Location.X+searchButton.Size.Width)+buffer, searchT.Location.Y - searchCB.Size.Height+searchT.Size.Height);
+            
+            
         }
         
         //Actor Search, searches only for actors.
@@ -85,7 +85,7 @@ namespace movieData
             resultTree.Nodes.Clear();
             string extraParams = "Returing only results matching from Actor's Field";
             DateTime startActor = DateTime.Now;
-            dm.performActorOnlySearch(searchParam, searchCB.CheckedIndices.Contains(1), ref resultList);
+            DataManager.performActorOnlySearch(searchParam, searchCB.CheckedIndices.Contains(1), ref resultList);
             DateTime endActor = DateTime.Now;
             if ((endActor - startActor).TotalMilliseconds > 1000)
             {
@@ -143,7 +143,7 @@ namespace movieData
             // Get the node that was clicked
             TreeNode selectedNode = resultTree.HitTest(e.Location).Node;
 
-            if (selectedNode != null && selectedNode.Tag != null && selectedNode.Tag.GetType() == typeof(simpleMovie))
+            if (selectedNode != null && selectedNode.Tag != null && selectedNode.Tag.GetType() == typeof(info))
             {
                 // Do something with the selected node here...
                 viewItem(selectedNode.Tag, e);
@@ -169,7 +169,7 @@ namespace movieData
 
                     extraParams = "Returing only results matching from Actor's Field";
                     DateTime startActor = DateTime.Now;
-                    dm.performActorOnlySearch(searchParam, searchCB.CheckedIndices.Contains(1), ref resultList); //Determinds if each word is searched, or if exact matches are
+                    DataManager.performActorOnlySearch(searchParam, searchCB.CheckedIndices.Contains(1), ref resultList); //Determinds if each word is searched, or if exact matches are
                     DateTime endActor = DateTime.Now;
                     if ((endActor - startActor).TotalMilliseconds > 1000)
                     {
@@ -197,7 +197,7 @@ namespace movieData
                 else
                 {
                     DateTime startSearch = DateTime.Now;
-                    exactMovie = dm.performSearch(searchParam);
+                    exactMovie = DataManager.performSearch(searchParam);
                     DateTime endSearch = DateTime.Now;
                     if ((endSearch - startSearch).TotalMilliseconds > 1000)
                     {
@@ -220,7 +220,7 @@ namespace movieData
                         exactMatch.Tag = exactMovie;
                     }
 
-                    dm.performRegexSearch(searchParam, ref resultList);
+                    DataManager.performRegexSearch(searchParam, ref resultList);
                     DateTime endRegex = DateTime.Now;
                     if ((endRegex - startRegex).TotalMilliseconds > 1000)
                     {
@@ -236,7 +236,7 @@ namespace movieData
                     if (searchCB.CheckedItems.Count > 0 && searchCB.CheckedIndices.Contains(2) && !searchCB.CheckedIndices.Contains(3)) //Detailed but not advanced
                     {
                         DateTime startDetailed = DateTime.Now;
-                        dm.performDetailedSearch(searchParam, ref resultList);
+                        DataManager.performDetailedSearch(searchParam, ref resultList);
                         DateTime endDetailed = DateTime.Now;
                         if ((endDetailed - startDetailed).TotalMilliseconds > 1000)
                         {
@@ -251,7 +251,7 @@ namespace movieData
                     else if (searchCB.CheckedItems.Count > 0 && searchCB.CheckedIndices.Contains(3) && !searchCB.CheckedIndices.Contains(2)) //Advanced but not detailed
                     {
                         DateTime startAdvanced = DateTime.Now;
-                        dm.performAdvancedSearch(searchParam, ref resultList);
+                        DataManager.performAdvancedSearch(searchParam, ref resultList);
                         DateTime endAdvanced = DateTime.Now;
                         if ((endAdvanced - startAdvanced).TotalMilliseconds > 1000)
                         {
@@ -266,7 +266,7 @@ namespace movieData
                     else if (searchCB.CheckedItems.Count > 0 && searchCB.CheckedIndices.Contains(2) && searchCB.CheckedIndices.Contains(3)) //Detailed and Advanced
                     {
                         DateTime startAdvancedDetailed = DateTime.Now;
-                        dm.performDetailedAdvancedSearch(searchParam, ref resultList);
+                        DataManager.performDetailedAdvancedSearch(searchParam, ref resultList);
                         DateTime endAdvancedDetailed = DateTime.Now;
                         if ((endAdvancedDetailed - startAdvancedDetailed).TotalMilliseconds > 1000)
                         {
@@ -279,8 +279,8 @@ namespace movieData
                         extraParams = "Detailed and Advanced";
                     }
                 }
-                dm.quickSort(ref resultList);
-                dm.cullSorted(ref resultList);
+                DataManager.quickSort(ref resultList);
+                DataManager.cullSorted(ref resultList);
                 DateTime buildList = DateTime.Now;
                 resultList.Remove(exactMovie);
                 if (resultList.Count > 0)
@@ -364,7 +364,7 @@ namespace movieData
         /* *
          public void searchButton_Click(object sender, EventArgs e)
         {
-            List<simpleMovie> resultList = new List<simpleMovie>();
+            List<info> resultList = new List<info>();
             resultList.Clear();
             resultsList.Clear();
             bool exact = false;

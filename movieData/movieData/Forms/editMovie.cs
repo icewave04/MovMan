@@ -13,30 +13,30 @@ namespace movieData
     public partial class editMovie : UserControl
     {
         private List<string> actors;
-        private dataManager dm;
+        private dataManager DataManager;
         public EventHandler sendEdit = null;
         public EventHandler deleteEntry = null;
         private data movieData;
-        private simpleMovie selected;
+        private info selected;
         private int index;
 
-        public editMovie(dataManager dm)
+        public editMovie(dataManager DataManager)
         {
             InitializeComponent();
-            this.dm = dm;
+            this.DataManager = DataManager;
             genreCB.DataSource = Enum.GetValues(typeof(genreEnum));
             ratingCB.DataSource = Enum.GetValues(typeof(ratingEnum));
         }
 
-        public void editItem(simpleMovie editMovie)
+        public void editItem(info editMovie)
         {
-            this.index = dm.getIndexOf(editMovie);
-            this.selected = dm.getMovie(index);
+            this.index = DataManager.getIndexOf(editMovie);
+            this.selected = DataManager.getMovie(index);
             titleT.Text = editMovie.getTitle();
             fileLocationT.Text = editMovie.File;
             genreCB.SelectedIndex = (int)editMovie.Genre;
             ratingCB.SelectedIndex = (int)editMovie.Rating;
-            movieData = dm.getdata(editMovie.File);
+            movieData = DataManager.getdata(editMovie.File);
             yearT.Text = movieData.Year.ToString();
             imageT.Text = movieData.Image;
             actors = movieData.getActors();
@@ -56,11 +56,11 @@ namespace movieData
                     }
                     catch (ArgumentException ae)
                     {
-                        dm.ge.GlobalTryCatch(ae, movieData.Image);
+                        DataManager.GE.GlobalTryCatch(ae, movieData.Image);
                     }
                     catch (FileNotFoundException fnfe)
                     {
-                        dm.ge.GlobalTryCatch(fnfe, movieData.Image);
+                        DataManager.GE.GlobalTryCatch(fnfe, movieData.Image);
                     }
                 }
                 else
@@ -159,9 +159,9 @@ namespace movieData
                 {
                     int x = -1;
                     Int32.TryParse(yearT.Text.Trim(), out x);
-                    if (dm.editMovie(titleT.Text.Trim(), (genreEnum)genreCB.SelectedIndex, (ratingEnum)ratingCB.SelectedIndex, fileLocationT.Text.Trim(), x, imageT.Text.Trim(), descriptionT.Text.Trim(), actors, index, out result))
+                    if (DataManager.editMovie(titleT.Text.Trim(), (genreEnum)genreCB.SelectedIndex, (ratingEnum)ratingCB.SelectedIndex, fileLocationT.Text.Trim(), x, imageT.Text.Trim(), descriptionT.Text.Trim(), actors, index, out result))
                     {
-                        sendEdit(dm.getMovie(index), new EventArgs());
+                        sendEdit(DataManager.getMovie(index), new EventArgs());
                     }
                 }
             }
@@ -182,7 +182,7 @@ namespace movieData
             String result;
             if (dr == DialogResult.Yes)
             {
-                if (dm.removeEntry(index, dm.getMovie(index), out result))
+                if (DataManager.removeEntry(index, DataManager.getMovie(index), out result))
                 {
                     MessageBox.Show(result, "Entry Deleted", MessageBoxButtons.OK);
                     deleteEntry(null, null);

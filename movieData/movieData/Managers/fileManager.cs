@@ -89,7 +89,7 @@ namespace movieData
             }
         }
 
-        public void readAll(ref List<simpleMovie> readList)
+        public void readAll(ref List<info> readList)
         {
             string title = String.Empty;
             string file = String.Empty;
@@ -139,7 +139,7 @@ namespace movieData
                             }
                             reader.MoveToNextAttribute();
 
-                            readList.Add(new simpleMovie(title, file, rating, genre));
+                            readList.Add(new info(title, file, rating, genre));
                             title = "";
                             file = "";
                             genre = genreEnum.Unknown;
@@ -191,7 +191,7 @@ namespace movieData
             }
         }
 
-        public void writeAll(List<simpleMovie> writeList)
+        public void writeAll(List<info> writeList)
         {
             try
             {
@@ -209,7 +209,7 @@ namespace movieData
                 xmlw.WriteStartDocument();
                 xmlw.WriteStartElement("Movies");
                 
-                foreach (simpleMovie movie in writeList)
+                foreach (info movie in writeList)
                 {
                     xmlw.WriteStartElement("Movie");
                     string rating = ((int)movie.Genre).ToString();

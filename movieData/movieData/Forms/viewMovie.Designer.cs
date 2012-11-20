@@ -66,51 +66,58 @@
             // genreL
             // 
             this.genreL.AutoSize = true;
+            this.genreL.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F);
             this.genreL.Location = new System.Drawing.Point(7, 88);
             this.genreL.Name = "genreL";
-            this.genreL.Size = new System.Drawing.Size(35, 13);
+            this.genreL.Size = new System.Drawing.Size(79, 29);
             this.genreL.TabIndex = 2;
             this.genreL.Text = "label3";
             // 
             // ratingL
             // 
             this.ratingL.AutoSize = true;
+            this.ratingL.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F);
             this.ratingL.Location = new System.Drawing.Point(7, 101);
             this.ratingL.Name = "ratingL";
-            this.ratingL.Size = new System.Drawing.Size(35, 13);
+            this.ratingL.Size = new System.Drawing.Size(79, 29);
             this.ratingL.TabIndex = 3;
             this.ratingL.Text = "label4";
             // 
             // yearL
             // 
             this.yearL.AutoSize = true;
+            this.yearL.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F);
             this.yearL.Location = new System.Drawing.Point(7, 114);
             this.yearL.Name = "yearL";
-            this.yearL.Size = new System.Drawing.Size(35, 13);
+            this.yearL.Size = new System.Drawing.Size(79, 29);
             this.yearL.TabIndex = 4;
             this.yearL.Text = "label5";
             // 
             // imageL
             // 
             this.imageL.AutoSize = true;
+            this.imageL.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.imageL.Location = new System.Drawing.Point(7, 127);
             this.imageL.Name = "imageL";
-            this.imageL.Size = new System.Drawing.Size(35, 13);
+            this.imageL.Size = new System.Drawing.Size(60, 24);
             this.imageL.TabIndex = 5;
             this.imageL.Text = "label6";
             // 
             // actors
             // 
+            this.actors.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.actors.FormattingEnabled = true;
+            this.actors.ItemHeight = 24;
             this.actors.Location = new System.Drawing.Point(10, 154);
             this.actors.Name = "actors";
-            this.actors.Size = new System.Drawing.Size(123, 251);
+            this.actors.Size = new System.Drawing.Size(243, 244);
             this.actors.TabIndex = 6;
             this.actors.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.searchActor);
             // 
             // description
             // 
             this.description.BackColor = System.Drawing.SystemColors.Control;
+            this.description.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.description.Location = new System.Drawing.Point(10, 422);
             this.description.Name = "description";
             this.description.ReadOnly = true;
@@ -130,7 +137,7 @@
             // 
             this.editMovieBtn.Location = new System.Drawing.Point(10, 608);
             this.editMovieBtn.Name = "editMovieBtn";
-            this.editMovieBtn.Size = new System.Drawing.Size(75, 23);
+            this.editMovieBtn.Size = new System.Drawing.Size(75, 47);
             this.editMovieBtn.TabIndex = 9;
             this.editMovieBtn.Text = "Edit Movie";
             this.editMovieBtn.UseVisualStyleBackColor = true;
@@ -140,7 +147,7 @@
             // 
             this.vlcBtn.Location = new System.Drawing.Point(512, 608);
             this.vlcBtn.Name = "vlcBtn";
-            this.vlcBtn.Size = new System.Drawing.Size(75, 23);
+            this.vlcBtn.Size = new System.Drawing.Size(75, 47);
             this.vlcBtn.TabIndex = 10;
             this.vlcBtn.Text = "Play";
             this.vlcBtn.UseVisualStyleBackColor = true;
